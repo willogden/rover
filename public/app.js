@@ -34,7 +34,6 @@
 
             // Log messages from the server
             this.connection.onmessage = function (e) {
-                console.log("balsh",e);
                 for(var c in this.registeredEventListeners.onmessage) {
                     this.registeredEventListeners.onmessage[c].call(this,JSON.parse(e.data));
                 }
@@ -43,7 +42,6 @@
         }
 
         JSONWebSocket.prototype.send = function(pojo) {
-            console.log("sending");
             this.connection.send(JSON.stringify(pojo));
         }
 
@@ -76,7 +74,7 @@
 
         roverJSONWebSocket.addEventListener("onopen",function() {
             console.log("Open");
-            roverJSONWebSocket.send({type: "location",data: {lon: 1.23, lat: -1.05}}); // Send the message 'Ping' to the server
+            roverJSONWebSocket.send({type: "location",data: {lon: 1.23, lat: -1.05}}); // Send the message to the server
         });
 
         roverJSONWebSocket.addEventListener("onerror",function(error) {
@@ -91,7 +89,6 @@
 
     roverApp.run(function(jsonWebSocket) {
         var connection = jsonWebSocket.create('rover','ws://localhost:3000/api/ws');
-        //connection.send({test: "data"});
     })
 
 })();
