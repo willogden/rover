@@ -30,7 +30,7 @@
                 for(var c in this.registeredEventListeners.onerror) {
                     this.registeredEventListeners.onerror[c].call(this,error);
                 }
-            };
+            }.bind(this);
 
             // Log messages from the server
             this.connection.onmessage = function (e) {
@@ -89,7 +89,7 @@
     });
 
     roverApp.run(function(jsonWebSocket) {
-        var connection = jsonWebSocket.create('rover','ws://localhost:3000/api/ws');
+        var connection = jsonWebSocket.create('rover','ws://' + location.host + '/api/ws');
     })
 
 })();
