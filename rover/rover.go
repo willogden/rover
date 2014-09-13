@@ -2,6 +2,10 @@ package rover
 
 import (
     //"log"
+
+    "github.com/kidoman/embd"
+    _ "github.com/kidoman/embd/host/rpi"
+    "github.com/kidoman/embd/controller/servoblaster"
 )
 
 type Rover struct {
@@ -12,6 +16,9 @@ type Rover struct {
     // Outbound messages from rover
     sendMessage chan Messager
 
+    // Servoblaster (software PWM)
+    sb *servoblaster.ServoBlaster
+
 }
 
 // Create new instance of a rover.
@@ -21,6 +28,7 @@ func NewRover(receivedMessages chan Messager, sendMessage chan Messager) *Rover 
     rover := &Rover{
         receivedMessages: receivedMessages,
         sendMessage: sendMessage,
+        sb: servoblaster.New()
     }
 
     return rover
@@ -32,12 +40,19 @@ func (r *Rover) processReceivedMessage(message Messager) {
     switch message.(type) {
         case *LocationMessage:
             r.processLocationMessage(message.(*LocationMessage))
+        case *MotorSpeedMessage:
+            r.processMotorSpeedMessage(message.(*MotorSpeedMessage))
     }
 
 }
 
 // Goroutine to listen for messages sent to Rover
 func (r *Rover) listenForMessages() {
+
+    defer func() {
+        _ := r.sb.Close()
+    }()
+
     for {
         for message := range r.receivedMessages {
             r.processReceivedMessage(message);
@@ -56,6 +71,11 @@ func (r *Rover) createMessages() {
 func (r *Rover) processLocationMessage(lm *LocationMessage) {
     sm := StatusMessage{Status:"location message received"}
     r.sendMessage <- sm
+}
+
+
+func (r *Rover) processMotorSpeedMessage(lm *MotorSpeedMessage) {
+    r.sb.Channel(0).SetMicroseconds(20000)
 }
 
 // Start the Rover

@@ -73,8 +73,9 @@
         var roverJSONWebSocket = jsonWebSocket.get("rover");
 
         roverJSONWebSocket.addEventListener("onopen",function() {
-            console.log("Open");
-            roverJSONWebSocket.send({type: "location",data: {lon: 1.23, lat: -1.05}}); // Send the message to the server
+            //console.log("Open");
+            //roverJSONWebSocket.send({type: "location",data: {lon: 1.23, lat: -1.05}}); // Send the message to the server
+            roverJSONWebSocket.send({type: "motorspeed",data: {motor: 0, speed: 100}}); // Send the message to the server
         });
 
         roverJSONWebSocket.addEventListener("onerror",function(error) {
