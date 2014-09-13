@@ -3,7 +3,7 @@ package rover
 import (
     //"log"
 
-    "github.com/kidoman/embd"
+    //"github.com/kidoman/embd"
     _ "github.com/kidoman/embd/host/rpi"
     "github.com/kidoman/embd/controller/servoblaster"
 )
@@ -28,7 +28,7 @@ func NewRover(receivedMessages chan Messager, sendMessage chan Messager) *Rover 
     rover := &Rover{
         receivedMessages: receivedMessages,
         sendMessage: sendMessage,
-        sb: servoblaster.New()
+        sb: servoblaster.New(),
     }
 
     return rover
@@ -50,7 +50,7 @@ func (r *Rover) processReceivedMessage(message Messager) {
 func (r *Rover) listenForMessages() {
 
     defer func() {
-        _ := r.sb.Close()
+        _ = r.sb.Close()
     }()
 
     for {
@@ -74,12 +74,18 @@ func (r *Rover) processLocationMessage(lm *LocationMessage) {
 }
 
 
-func (r *Rover) processMotorSpeedMessage(lm *MotorSpeedMessage) {
-    r.sb.Channel(0).SetMicroseconds(20000)
+func (r *Rover) processMotorSpeedMessage(msm *MotorSpeedMessage) {
+    //log.Println("hello there")
+    r.sb.Channel(msm.Motor).SetMicroseconds((20000/100)*msm.Speed)
+
+    sm := StatusMessage{Status:"motorspeed message received"}
+    r.sendMessage <- sm
 }
 
 // Start the Rover
 func (r *Rover) Run() {
+
     go r.listenForMessages()
+
     //go r.createMessages()
 }

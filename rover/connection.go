@@ -78,6 +78,12 @@ func (c * Connection) UnmarshalWebSocketMessage(iwm *InboundWebSocketMessage) (M
                 return nil, err
             }
             return &lm,nil
+        case iwm.Type == "motorspeed":
+            var msm MotorSpeedMessage
+            if err := json.Unmarshal(*iwm.Data, &msm); err != nil {
+                return nil, err
+            }
+            return &msm,nil
     }
 
     return nil,errors.New("InboundWebSocketMessage type not recognised")

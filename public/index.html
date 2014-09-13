@@ -7,9 +7,12 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        <link rel=stylesheet href=/app.css>
         <script type="text/javascript" src="angular.min.js"></script>
         <script type="text/javascript" src="app.js"></script>
     </head>
     <body ng-controller="MainCtrl">
+        <input ng-model="motorspeed0" ng-change="motorspeed0Change()" type=range min=0 max=100 value=0 id="motorspeed-0">
+        <input ng-model="motorspeed1" type=range min=0 max=100 value=0 id="motorspeed-1">
     </body>
 </html>
