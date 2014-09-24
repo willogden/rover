@@ -4,8 +4,8 @@ import (
     //"log"
 
     //"github.com/kidoman/embd"
-    //_ "github.com/kidoman/embd/host/rpi"
-    //"github.com/kidoman/embd/controller/servoblaster"
+    _ "github.com/kidoman/embd/host/rpi"
+    "github.com/kidoman/embd/controller/servoblaster"
 )
 
 type Rover struct {
@@ -17,7 +17,7 @@ type Rover struct {
     sendMessage chan Messager
 
     // Servoblaster (software PWM)
-    //sb *servoblaster.ServoBlaster
+    sb *servoblaster.ServoBlaster
 
 }
 
@@ -28,7 +28,7 @@ func NewRover(receivedMessages chan Messager, sendMessage chan Messager) *Rover 
     rover := &Rover{
         receivedMessages: receivedMessages,
         sendMessage: sendMessage,
-        //sb: servoblaster.New(),
+        sb: servoblaster.New(),
     }
 
     return rover
@@ -50,13 +50,11 @@ func (r *Rover) processReceivedMessage(message Messager) {
 func (r *Rover) listenForMessages() {
 
     defer func() {
-    //    _ = r.sb.Close()
+        _ = r.sb.Close()
     }()
 
     for {
         for message := range r.receivedMessages {
-            //log.Println("received a message in rover")
-            //r.sendMessage <- message
             r.processReceivedMessage(message);
         }
     }
@@ -71,7 +69,6 @@ func (r *Rover) createMessages() {
 
 
 func (r *Rover) processLocationMessage(lm *LocationMessage) {
-    //sm := &StatusMessage{Status:"location message received"}
     sm := NewStatusMessage()
     sm.Status = "location message received"
 
@@ -80,9 +77,9 @@ func (r *Rover) processLocationMessage(lm *LocationMessage) {
 
 
 func (r *Rover) processMotorSpeedMessage(msm *MotorSpeedMessage) {
-    //log.Println("hello there")
-    //r.sb.Channel(msm.Motor).SetMicroseconds((20000/100)*msm.Speed)
-    //sm := &StatusMessage{Status:"motorspeed message received"}
+
+    r.sb.Channel(msm.Motor).SetMicroseconds((20000/100)*msm.Speed)
+
     sm := NewStatusMessage()
     sm.Status = "motorspeed message received"
 
