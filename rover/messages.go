@@ -1,5 +1,8 @@
 package rover
 
+import (
+
+)
 
 type Messager interface {
     GetType() string
@@ -7,38 +10,60 @@ type Messager interface {
 
 
 type Message struct {
-
+    messageType string
 }
 
 func (m Message) GetType() string {
-    return "message"
+    return m.messageType
 }
 
+const (
+    LocationMessageType = "location"
+    MotorSpeedMessageType = "motorspeed"
+    StatusMessageType = "status"
+)
+
+func NewMessageByType(messageType string) Messager {
+    switch messageType {
+        case LocationMessageType:
+            return NewLocationMessage()
+        case MotorSpeedMessageType:
+            return NewMotorSpeedMessage()
+        case StatusMessageType:
+            return NewStatusMessage()
+        default:
+            return nil
+    }
+}
+
+
 type LocationMessage struct {
+    Message
     Lon float64 `json:"lon"`
     Lat float64 `json:"lat"`
 }
 
-
-func (lm LocationMessage) GetType() string {
-    return "location"
+func NewLocationMessage() *LocationMessage {
+    return &LocationMessage{Message: Message{messageType: LocationMessageType}}
 }
 
 
 type MotorSpeedMessage struct {
+    Message
     Motor int `json:"motor"`
     Speed int `json:"speed"`
 }
 
-func (msm MotorSpeedMessage) GetType() string {
-    return "motorspeed"
+func NewMotorSpeedMessage() *MotorSpeedMessage {
+    return &MotorSpeedMessage{Message: Message{messageType: MotorSpeedMessageType}}
 }
 
 
 type StatusMessage struct {
+    Message
     Status string `json:"status"`
 }
 
-func (sm StatusMessage) GetType() string {
-    return "status"
+func NewStatusMessage() *StatusMessage {
+    return &StatusMessage{Message: Message{messageType: StatusMessageType}}
 }

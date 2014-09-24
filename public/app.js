@@ -92,8 +92,11 @@
         $scope.motorspeed1 = 0;
 
         $scope.motorspeed0Change = function() {
-            //console.log($scope.motorspeed0);
-            roverJSONWebSocket.send({type: "motorspeed",data: {motor: 0, speed: $scope.motorspeed0}})
+            roverJSONWebSocket.send({type: "motorspeed",data: {motor: 0, speed: Number($scope.motorspeed0)}})
+        };
+
+        $scope.motorspeed1Change = function() {
+            roverJSONWebSocket.send({type: "motorspeed",data: {motor: 1, speed: Number($scope.motorspeed1)}})
         };
 
     });

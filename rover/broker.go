@@ -59,12 +59,7 @@ func (b *Broker) Run() {
                 }
             case m := <-b.fromRover:
                 for c := range b.connections {
-                    select {
-                    case c.toClient <- m:
-                    default:
-                        delete(b.connections, c)
-                        close(c.toClient)
-                    }
+                    c.toClient <- m
                 }
             }
         }
