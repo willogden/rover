@@ -8,6 +8,7 @@ import (
     "log"
 
     "github.com/willogden/rover/rover"
+    "github.com/willogden/rover/rover/platform"
 
 )
 
@@ -21,7 +22,7 @@ func main() {
     broker := rover.NewBroker()
     broker.Run()
 
-    r := rover.NewRover(broker.GetToRoverChannel(),broker.GetFromRoverChannel())
+    r := platform.NewRover(broker.GetToRoverChannel(),broker.GetFromRoverChannel())
     r.Run()
 
     mux := http.NewServeMux()

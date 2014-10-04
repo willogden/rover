@@ -1,15 +1,19 @@
 package rover
 
+import (
+    "github.com/willogden/rover/rover/messages"
+)
+
 type Broker struct {
 
     // Registered connections.
     connections map[*Connection]bool
 
     // Inbound messages from the connections.
-    toRover chan Messager
+    toRover chan messages.Messager
 
     // Outbound messages to clients
-    fromRover chan Messager
+    fromRover chan messages.Messager
 
     // Register requests from the connections.
     register chan *Connection
@@ -23,8 +27,8 @@ type Broker struct {
 func NewBroker() *Broker {
 
     broker := &Broker{
-        toRover:   make(chan Messager),
-        fromRover:   make(chan Messager),
+        toRover:   make(chan messages.Messager),
+        fromRover:   make(chan messages.Messager),
         register:    make(chan *Connection),
         unregister:  make(chan *Connection),
         connections: make(map[*Connection]bool),
@@ -34,12 +38,12 @@ func NewBroker() *Broker {
 }
 
 // Return the channel for sending messages to Rover
-func (b *Broker) GetToRoverChannel() chan Messager {
+func (b *Broker) GetToRoverChannel() chan messages.Messager {
     return b.toRover
 }
 
 // Return the channel for receiving messages from Rover
-func (b *Broker) GetFromRoverChannel() chan Messager {
+func (b *Broker) GetFromRoverChannel() chan messages.Messager {
     return b.fromRover
 }
 

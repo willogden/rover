@@ -7,6 +7,8 @@ import (
     "sync"
 
     "github.com/gorilla/websocket"
+
+    "github.com/willogden/rover/rover/messages"
 )
 
 
@@ -18,7 +20,7 @@ type Connection struct {
     broker *Broker
 
     // Buffered channel of outbound messages.
-    toClient chan Messager
+    toClient chan messages.Messager
 
     mut *sync.Mutex
 }
@@ -32,13 +34,13 @@ type InboundWebSocketMessage struct {
 
 type OutboundWebSocketMessage struct {
     Type string `json:"type"`
-    Data Messager `json:"data"`
+    Data messages.Messager `json:"data"`
 }
 
 
 func NewConnection(ws *websocket.Conn, b *Broker) {
 
-    c := &Connection{ws: ws, broker: b, toClient: make(chan Messager), mut: &sync.Mutex{}}
+    c := &Connection{ws: ws, broker: b, toClient: make(chan messages.Messager), mut: &sync.Mutex{}}
     c.broker.register <- c
 
     go c.writer()
@@ -73,9 +75,9 @@ func (c *Connection) reader() {
 }
 
 
-func (c * Connection) UnmarshalWebSocketMessage(iwm *InboundWebSocketMessage) (Messager,error) {
+func (c * Connection) UnmarshalWebSocketMessage(iwm *InboundWebSocketMessage) (messages.Messager,error) {
 
-    if m := NewMessageByType(iwm.Type); m != nil {
+    if m := messages.NewMessageByType(iwm.Type); m != nil {
         if err := json.Unmarshal(*iwm.Data, &m); err != nil {
             return nil, err
         }
