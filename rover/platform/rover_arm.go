@@ -1,6 +1,9 @@
 package platform
 
 import (
+    "os/exec"
+    //"fmt"
+
     //"github.com/kidoman/embd"
     _ "github.com/kidoman/embd/host/rpi"
     "github.com/kidoman/embd/controller/servoblaster"
@@ -37,18 +40,30 @@ func NewRover(receivedMessages chan messages.Messager, sendMessage chan messages
 // Stop the Rover
 func (r *Rover) Stop() {
     _ = r.sb.Close()
+
+    r.stopServoBlaster()
 }
 
 // Start servoblaster service
 func (r *Rover) startServoBlaster() {
 
-    lsCmd := exec.Command("bash", "-c", "sudo ~/PiBits/ServoBlaster/user/servod --min=0 --max=2000")
-    lsOut, err := lsCmd.Output()
+    cmd := exec.Command("bash", "-c", "sudo ~/PiBits/ServoBlaster/user/servod --min=0 --max=2000")
+    err := cmd.Run()
     if err != nil {
         panic(err)
     }
 
     r.sb = servoblaster.New()
+}
+
+func (r *Rover) stopServoBlaster() {
+
+    cmd := exec.Command("bash", "-c", "sudo killall servod")
+    err := cmd.Run()
+    if err != nil {
+        panic(err)
+    }
+
 }
 
 
