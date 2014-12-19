@@ -40,7 +40,8 @@ func main() {
         rover.NewConnection(conn,broker)
     })
 
-    n := negroni.Classic()
+    //n := negroni.Classic()
+    n := negroni.New(negroni.NewRecovery(), negroni.NewLogger(), negroni.NewStatic(http.Dir("public/dist")))
     n.UseHandler(mux)
     n.Run(":3000")
 

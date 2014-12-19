@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html ng-app="app" ng-controller="AppCtrl">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title ng-bind="pageTitle"></title>
+        <link type="text/css" rel="stylesheet" media="all" href="vendor.css">
+        <link type="text/css" rel="stylesheet" media="all" href="app.css">
+        <script type="text/javascript" src="app.js"></script>
+    </head>
+
+    <body>
+        <ul>
+            <li>
+                <a ui-sref="home" ui-sref-active="active">
+                    <i></i>
+                    Home
+                </a>
+            </li>
+            <li>
+                <a ui-sref="about" ui-sref-active="active">
+                    <i></i>
+                    What is it?
+                </a>
+            </li>
+        </ul>
+        <main ui-view="main"></main>
+    </body>
+
+</html>

@@ -1,0 +1,21 @@
+.components__control-stick {
+    display: inline-block;
+
+    input[type=range] {
+        cursor: pointer;
+        //width: 100px !important;
+        -webkit-appearance: none;
+        transform:rotate(270deg);
+        transform-origin: bottom right;
+        background-color: $base-accent-opposite-color;
+        margin-bottom: 100%;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 10px;
+        height: 10px;
+        background-color: $base-accent-color;
+    }
+
+}

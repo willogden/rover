@@ -1,0 +1,17 @@
+$susy: (
+  columns: 4,
+  gutters: .25,
+  gutter-position: inside,
+);
+
+$bp-small : 24em;
+$bp-med : 46.8em;
+$bp-large : 50em;
+$bp-xl : 73em;
+
+$layout-small: layout(4);
+$layout-med: layout(8);
+$layout-large: layout(12);
+$layout-xl: layout(16);
+
+$breakpoint-no-query-fallbacks: true;
