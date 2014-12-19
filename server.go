@@ -6,6 +6,9 @@ import (
     "net/http"
     "fmt"
     "log"
+    "os"
+    "os/signal"
+    "syscall"
 
     "github.com/willogden/rover/rover"
     "github.com/willogden/rover/rover/platform"
@@ -24,6 +27,16 @@ func main() {
 
     r := platform.NewRover(broker.GetToRoverChannel(),broker.GetFromRoverChannel())
     r.Run()
+
+    // Handle SIGINT and SIGTERM.
+    ch := make(chan os.Signal)
+    signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
+    go func() {
+        <-ch
+        // Do cleanup here
+        r.Stop()
+        os.Exit(1)
+    }()
 
     mux := http.NewServeMux()
     mux.HandleFunc("/s", func(w http.ResponseWriter, req *http.Request) {
